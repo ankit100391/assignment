@@ -5,7 +5,7 @@ pipeline {
             steps{
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     print "Stage A"
-                    sh "exit 1"
+                    sh "exit 0"
                     script { stage_result = true }
                 }
             }    
