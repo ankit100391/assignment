@@ -1,35 +1,32 @@
 pipeline {
-    agent none
+    agent any 
     stages {
-        stage('Run Tests') {
-            parallel {
-                stage('Test On Windows') {
-                    agent {
-                        label "windows"
-                    }
-                    steps {
-                        bat "run-tests.bat"
-                    }
-                    post {
-                        always {
-                            junit "**/TEST-*.xml"
-                        }
-                    }
+        stage('A') {
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    print "Stage A"
+                    sh "exit 1"
+                    script { stage_result = true }
                 }
-                stage('Test On Linux') {
-                    agent {
-                        label "linux"
-                    }
-                    steps {
-                        sh "run-tests.sh"
-                    }
-                    post {
-                        always {
-                            junit "**/TEST-*.xml"
-                        }
-                    }
-                }
-            }
+            }    
+        }
+
+        stage('B'){
+            when { 
+                expression{ stage_result == true }
+            }    
+            steps{
+                print "EXECUTING: Stage B STAGE_A_RESULT: ${stage_result}"
+            }    
+        }
+
+        stage('C'){
+            when { 
+                expression{ stage_result == false }
+            }    
+            steps{
+                print "EXECUTING: Stage C STAGE_A_RESULT: ${stage_result}"
+            }    
         }
     }
 }
