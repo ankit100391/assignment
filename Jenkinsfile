@@ -1,22 +1,39 @@
-piepline {
-    agent any 
+pipeline {
+    agent any
     stages {
-        stage('STAGE-1') {
-            when {
-                branch 'master'
-            }
-            steps{
-                sh "echo STEGE-2 executes if branch is master"
+		stage('BUILD') {
+			steps {
+				sh 'sleep 5'
+			}
+		}
+        stage('TEST MULTIPLE') {
+            parallel {
+				stage('WINDOWS TEST') {
+					steps {
+                     	sh 'sleep 5'
+					}
+				}
+				stage('LINUX TEST') {
+					steps {
+						sh "sleep 5"
+					}
+				}
             }
         }
 
-        stage('STAGE-2'){
-            when {
-                branch 'master'
+		stage('DEPLOY') {
+			parallel {
+				stage('SERVER1') {
+					steps {
+                     	sh 'sleep 5'
+					}
+				}
+				stage('SERVER2') {
+					steps {
+						sh "sleep 5"
+					}
+				}
             }
-            steps{
-                sh "echo STEGE-2 executes if branch is master"
-            }
-        }
+		}
     }
 }
