@@ -8,7 +8,7 @@ pipeline {
                         branch 'master'
                     }
                     steps{
-                        git branch: 'master',
+                        git branch: 'master'
                         sh "echo STEGE-2 executes if branch is master"
                     }
                 }
