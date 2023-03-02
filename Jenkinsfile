@@ -29,7 +29,7 @@ pipeline {
                         sh '''
                             sleep 6
                             echo "This is a TEST on LINUX"
-                            exit 1
+                            exit 0
                         '''
                     }
                 }
